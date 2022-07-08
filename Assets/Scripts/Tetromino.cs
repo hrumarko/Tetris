@@ -6,12 +6,14 @@ public class Tetromino : MonoBehaviour
 {
     static int height = 20;
     static int width = 10;
+    public float speed;
     public Vector3 rotationPoint;
-    Transform[,] field = new Transform[height, width];
+    private static Transform[,] field = new Transform[height, width];
 
     private void Update() {
         Moving();
         Rotate();
+        BigSpeed();
     }
 
     private void FixedUpdate() {
@@ -42,8 +44,21 @@ public class Tetromino : MonoBehaviour
             if(posX >= width || posX < 0 || posY < 0){
                 return false;
             }
+            if(posY <= 19){
+                if (field[posY, posX] != null)
+                return false;
+            }
         }
         return true;
+    }
+
+    void BigSpeed(){
+        if(Input.GetKeyDown(KeyCode.DownArrow)){
+            Time.fixedDeltaTime = speed;
+        }
+        if(Input.GetKeyUp(KeyCode.DownArrow)){
+            Time.fixedDeltaTime = 0.6f;
+        }
     }
 
     void Rotate(){
@@ -56,12 +71,52 @@ public class Tetromino : MonoBehaviour
     }
 
     void Falling(){
+        
         transform.position += new Vector3(0, -1, 0);
         if(!isValid()){
-            transform.position += new Vector3(0, 1, 0);
+            transform.position += new Vector3(0, 1, 0);            
             this.enabled = false;
+            SetInField();
+            CheckLines();            
             FindObjectOfType<Spawner>().Spawn();
             
+        }
+    }
+
+
+    void SetInField(){
+        foreach(Transform child in transform){
+            int posX = Mathf.RoundToInt(child.transform.position.x);
+            int posY = Mathf.RoundToInt(child.transform.position.y);
+
+            field[posY, posX] = child;
+        }
+    }
+    
+    void CheckLines(){
+        
+        for(int i = height-1; i >= 0; i--){
+            if(HasLine(i)){
+                
+                DeleteLine(i);
+                //RowLine(i);
+            }
+        }
+    }
+
+    bool HasLine(int i){
+        for(int j = 0; j < width; j++){
+            if(field[i, j] == null)
+            return false;
+        }
+        return true;
+    }
+
+    void DeleteLine(int i){
+        
+        for(int j = 0; j < width; j++){
+            Destroy(field[i, j].gameObject);
+            field[i, j] = null;
         }
     }
 }
