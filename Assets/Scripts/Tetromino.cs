@@ -99,7 +99,7 @@ public class Tetromino : MonoBehaviour
             if(HasLine(i)){
                 
                 DeleteLine(i);
-                //RowLine(i);
+                LowerTheBlocks(i);
             }
         }
     }
@@ -117,6 +117,18 @@ public class Tetromino : MonoBehaviour
         for(int j = 0; j < width; j++){
             Destroy(field[i, j].gameObject);
             field[i, j] = null;
+        }
+    }
+
+    void LowerTheBlocks(int i){
+        for(int a = i; a < height; a++){
+            for(int j = 0; j< width; j++){
+                if(field[a, j] != null){
+                    field[a-1, j] = field[a, j];
+                    field[a, j] = null;
+                    field[a-1, j].transform.position -= new Vector3(0, 1, 0);
+                }
+            }
         }
     }
 }
