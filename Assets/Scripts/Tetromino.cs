@@ -9,11 +9,13 @@ public class Tetromino : MonoBehaviour
     public float speed;
     public Vector3 rotationPoint;
     private static Transform[,] field = new Transform[height, width];
+    
 
     private void Update() {
         Moving();
         Rotate();
         BigSpeed();
+        
     }
 
     private void FixedUpdate() {
@@ -88,8 +90,11 @@ public class Tetromino : MonoBehaviour
         foreach(Transform child in transform){
             int posX = Mathf.RoundToInt(child.transform.position.x);
             int posY = Mathf.RoundToInt(child.transform.position.y);
-
-            field[posY, posX] = child;
+            if(posY > height){
+                Debug.Log("Game Over");
+            }else{
+                field[posY, posX] = child;
+            }
         }
     }
     
@@ -131,4 +136,6 @@ public class Tetromino : MonoBehaviour
             }
         }
     }
+
+    
 }

@@ -49,6 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.06
   rotationPoint: {x: 0, y: 0, z: 0}
+  stepAudio: {fileID: 810511255574017963, guid: 309f987e0bf1100468b86f5804b0788b, type: 3}
+  deleteLinesAudio: {fileID: 1891218015611118008, guid: 3d2967c29feaf90479bc9665cdeb8585, type: 3}
 --- !u!1 &5323955297885994726
 GameObject:
   m_ObjectHideFlags: 0
