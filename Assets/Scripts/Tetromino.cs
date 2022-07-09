@@ -8,8 +8,13 @@ public class Tetromino : MonoBehaviour
     static int width = 10;
     public float speed;
     public Vector3 rotationPoint;
+   
     private static Transform[,] field = new Transform[height, width];
+
     
+    private void Start() {
+        
+    }
 
     private void Update() {
         Moving();
@@ -24,6 +29,7 @@ public class Tetromino : MonoBehaviour
 
     void Moving(){
         if(Input.GetKeyDown(KeyCode.LeftArrow)){
+            Sounds.PlayAudio("delete");
             transform.position += new Vector3(-1, 0, 0);
             if(!isValid()){
                 transform.position += new Vector3(1, 0, 0);
@@ -31,6 +37,7 @@ public class Tetromino : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.RightArrow)){
+            Sounds.PlayAudio("delete");
             transform.position += new Vector3(1, 0, 0);
             if(!isValid()){
                 transform.position += new Vector3(-1, 0, 0);
@@ -57,6 +64,7 @@ public class Tetromino : MonoBehaviour
     void BigSpeed(){
         if(Input.GetKeyDown(KeyCode.DownArrow)){
             Time.fixedDeltaTime = speed;
+            
         }
         if(Input.GetKeyUp(KeyCode.DownArrow)){
             Time.fixedDeltaTime = 0.6f;
@@ -90,7 +98,7 @@ public class Tetromino : MonoBehaviour
         foreach(Transform child in transform){
             int posX = Mathf.RoundToInt(child.transform.position.x);
             int posY = Mathf.RoundToInt(child.transform.position.y);
-            if(posY > height){
+            if(posY > 19){
                 Debug.Log("Game Over");
             }else{
                 field[posY, posX] = child;
@@ -118,7 +126,7 @@ public class Tetromino : MonoBehaviour
     }
 
     void DeleteLine(int i){
-        
+        Sounds.PlayAudio("step");
         for(int j = 0; j < width; j++){
             Destroy(field[i, j].gameObject);
             field[i, j] = null;
